@@ -3,7 +3,7 @@ import { Flex, Text, VStack } from '@chakra-ui/react'
 
 function ChannelContainer() {
   return (
-   <VStack bg='teal.600' h='100vh' p={3}>
+   <VStack border='1px solid teal' h='100vh' p={3}>
       <Text>ChannelContainer</Text>
     </VStack>
   )

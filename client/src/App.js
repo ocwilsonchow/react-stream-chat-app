@@ -16,14 +16,32 @@ import { StreamChat } from 'stream-chat';
 import { Chat } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 
-import { ChannelListContainer, ChannelContainer, Sidebar } from './components';
+import {
+  ChannelListContainer,
+  ChannelContainer,
+  Sidebar,
+  Auth,
+} from './components';
 
 import './App.css';
 
 const apiKey = '93myuqwykf99';
 const client = StreamChat.getInstance(apiKey);
+const authToken = false;
 
 function App() {
+  if (!authToken)
+    return (
+      <ChakraProvider theme={theme}>
+        <Box textAlign="center" fontSize="xl">
+          <Grid p={3}>
+            <ColorModeSwitcher justifySelf="flex-end" />
+          </Grid>
+          <Auth />
+        </Box>
+      </ChakraProvider>
+    );
+
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
@@ -32,10 +50,20 @@ function App() {
         </Grid>
 
         <Chat client={client}>
-          <Grid h='100vh' templateRows='repeat(2, 1fr)' templateColumns='repeat(10, 1fr)'>
-            <GridItem colSpan={1}><Sidebar /></GridItem>
-            <GridItem colSpan={1}><ChannelListContainer /></GridItem>
-            <GridItem colSpan={1}><ChannelContainer /></GridItem>
+          <Grid
+            h="100vh"
+            templateRows="repeat(2, 1fr)"
+            templateColumns="repeat(10, 1fr)"
+          >
+            <GridItem colSpan={1}>
+              <Sidebar />
+            </GridItem>
+            <GridItem colSpan={1}>
+              <ChannelListContainer />
+            </GridItem>
+            <GridItem colSpan={8}>
+              <ChannelContainer />
+            </GridItem>
           </Grid>
         </Chat>
       </Box>
