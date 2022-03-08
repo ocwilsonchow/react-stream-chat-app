@@ -14,22 +14,39 @@ import {
   Button,
 } from '@chakra-ui/react';
 
+const initialState = {
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+  avatarURL: 'https://lab-restful-api.s3.ap-northeast-2.amazonaws.com/profile.jpeg',
+};
+
 const Auth = () => {
+  const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(true);
 
-  const handleChange = () => {};
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value})
+  }
+
   const switchMode = () => {
     setIsSignup(prevIsSignup => !prevIsSignup);
-  };
+  }
+
+  const handleSubmit = e =>  {
+    e.preventDefault()
+    console.log(form)
+  }
 
   return (
     <Flex justifyContent="center">
-      <Box p={2} minW="500px">
+      <Box p={8} minW="500px">
         <Text fontWeight="bold" fontSize="3xl">
           {isSignup ? 'Sign Up' : 'Sign In'}
         </Text>
         {isSignup && (
-          <FormControl onSubmit={() => {}} isRequired>
+          <FormControl onSubmit={handleSubmit} isRequired>
             <FormLabel my={2} htmlFor="username">
               Username
             </FormLabel>
@@ -37,7 +54,7 @@ const Auth = () => {
               id="usernameInput"
               name="username"
               type="text"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
             <FormLabel my={2} htmlFor="email">
               Email address
@@ -46,16 +63,7 @@ const Auth = () => {
               id="emailInput"
               name="email"
               type="email"
-              onChange={() => console.log('typing')}
-            />
-            <FormLabel my={2} htmlFor="phone">
-              Phone Number
-            </FormLabel>
-            <Input
-              id="phoneInput"
-              name="phone"
-              type="number"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
             <FormLabel my={2} htmlFor="password">
               Password
@@ -64,7 +72,7 @@ const Auth = () => {
               id="passwordInput"
               name="password"
               type="password"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
             <FormLabel my={2} htmlFor="passwordConfirmation">
               Password Confirmation
@@ -73,16 +81,25 @@ const Auth = () => {
               id="passwordConfirmationInput"
               name="passwordConfirmation"
               type="password"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
-            <Button colorScheme="blue" my={6}>
+            <FormLabel my={2} htmlFor="avatarURL">
+              Avatar
+            </FormLabel>
+            <Input
+              id="avatarURL"
+              name="avatarURL"
+              type="text"
+              onChange={handleChange}
+            />
+            <Button colorScheme="blue" my={6} type='submit' onClick={handleSubmit}>
               Sign up
             </Button>
           </FormControl>
         )}
 
         {!isSignup && (
-          <FormControl onSubmit={() => {}} isRequired>
+          <FormControl onSubmit={handleSubmit} isRequired>
             <FormLabel my={2} htmlFor="email">
               Email address
             </FormLabel>
@@ -90,7 +107,7 @@ const Auth = () => {
               id="emailInput"
               name="email"
               type="email"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
             <FormLabel my={2} htmlFor="password">
               Password
@@ -99,17 +116,24 @@ const Auth = () => {
               id="passwordInput"
               name="password"
               type="password"
-              onChange={() => console.log('typing')}
+              onChange={handleChange}
             />
-            <Button colorScheme="blue" my={6}>
+            <Button colorScheme="blue" my={6} type='submit'>
               Sign in
             </Button>
           </FormControl>
         )}
 
         <Center>
-          {isSignup ? 'Already have an account?' : "Don't have an account?"}
-          <Button size='xs' onClick={switchMode}>
+          <Text fontSize="sm" mr={1}>
+            {isSignup ? 'Already have an account?' : "Don't have an account?"}
+          </Text>
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={switchMode}
+            color="blue.400"
+          >
             {isSignup ? 'Sign In' : 'Sign Up'}
           </Button>
         </Center>
