@@ -14,12 +14,15 @@ import {
   Button,
 } from '@chakra-ui/react';
 
+const cookies = new Cookies();
+
 const initialState = {
   username: '',
   email: '',
   password: '',
   passwordConfirmation: '',
-  avatarURL: 'https://lab-restful-api.s3.ap-northeast-2.amazonaws.com/profile.jpeg',
+  avatarURL:
+    'https://lab-restful-api.s3.ap-northeast-2.amazonaws.com/profile.jpeg',
 };
 
 const Auth = () => {
@@ -27,17 +30,38 @@ const Auth = () => {
   const [isSignup, setIsSignup] = useState(true);
 
   const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value})
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const switchMode = () => {
-    setIsSignup(prevIsSignup => !prevIsSignup);
-  }
-
-  const handleSubmit = e =>  {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log(form)
-  }
+
+    const { username, email, password, avatarURL } = form;
+    const URL = 'http://localhost:4000/auth';
+
+    const { data: { token, userId, hashedPassword }} = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
+      username,
+      email,
+      password,
+      avatarURL,
+    });
+
+    cookies.set('token', token);
+    cookies.set('username', username);
+    cookies.set('userId', userId);
+
+    if (isSignup) {
+      cookies.set('avatarURL', avatarURL);
+      cookies.set('hashedPassword', hashedPassword);
+    }
+
+    window.location.reload()
+  };
+
+   const switchMode = () => {
+    setIsSignup(prevIsSignup => !prevIsSignup);
+  };
 
   return (
     <Flex justifyContent="center">
@@ -46,7 +70,7 @@ const Auth = () => {
           {isSignup ? 'Sign Up' : 'Sign In'}
         </Text>
         {isSignup && (
-          <FormControl onSubmit={handleSubmit} isRequired>
+          <FormControl onSubmit={handleSubmit} >
             <FormLabel my={2} htmlFor="username">
               Username
             </FormLabel>
@@ -92,14 +116,19 @@ const Auth = () => {
               type="text"
               onChange={handleChange}
             />
-            <Button colorScheme="blue" my={6} type='submit' onClick={handleSubmit}>
+            <Button
+              colorScheme="blue"
+              my={6}
+              type="submit"
+              onClick={handleSubmit}
+            >
               Sign up
             </Button>
           </FormControl>
         )}
 
         {!isSignup && (
-          <FormControl onSubmit={handleSubmit} isRequired>
+          <FormControl onSubmit={handleSubmit} >
             <FormLabel my={2} htmlFor="email">
               Email address
             </FormLabel>
@@ -118,7 +147,12 @@ const Auth = () => {
               type="password"
               onChange={handleChange}
             />
-            <Button colorScheme="blue" my={6} type='submit'>
+            <Button
+              colorScheme="blue"
+              my={6}
+              type="submit"
+              onClick={handleSubmit}
+            >
               Sign in
             </Button>
           </FormControl>

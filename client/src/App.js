@@ -2,11 +2,6 @@ import React from 'react';
 import {
   ChakraProvider,
   Box,
-  Text,
-  Link,
-  VStack,
-  HStack,
-  Code,
   Grid,
   GridItem,
   theme,
@@ -25,9 +20,20 @@ import {
 
 import './App.css';
 
+const cookies = new Cookies();
 const apiKey = '93myuqwykf99';
+const authToken = cookies.get('token');
 const client = StreamChat.getInstance(apiKey);
-const authToken = false;
+
+if (authToken) {
+  client.connectUser({
+    id: cookies.get('userId'),
+    name: cookies.get('username'),
+    userId: cookies.get('userId'),
+    image: cookies.get('avatarURL'),
+    hashedPassword: cookies.get('hashedPassword'),
+  }, authToken);
+}
 
 function App() {
   if (!authToken)
