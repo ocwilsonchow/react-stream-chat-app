@@ -35,8 +35,6 @@ const Auth = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form)
-
     const { username, email, password, avatarURL } = form;
     const URL = 'http://localhost:4000/auth';
 
@@ -50,6 +48,7 @@ const Auth = () => {
     cookies.set('token', token);
     cookies.set('username', username);
     cookies.set('userId', userId);
+    cookies.set('email', email);
 
     if (isSignup) {
       cookies.set('avatarURL', avatarURL);
@@ -84,7 +83,7 @@ const Auth = () => {
               Email address
             </FormLabel>
             <Input
-              id="emailInput"
+              id="email"
               name="email"
               type="email"
               onChange={handleChange}
@@ -129,14 +128,14 @@ const Auth = () => {
 
         {!isSignup && (
           <FormControl onSubmit={handleSubmit} >
-            <FormLabel my={2} htmlFor="email">
-              Email address
+            <FormLabel my={2} htmlFor="username">
+              Username
             </FormLabel>
             <Input
-              id="emailInput"
-              name="email"
-              type="email"
+              name="username"
+              type="text"
               onChange={handleChange}
+              required
             />
             <FormLabel my={2} htmlFor="password">
               Password
@@ -146,6 +145,7 @@ const Auth = () => {
               name="password"
               type="password"
               onChange={handleChange}
+              required
             />
             <Button
               colorScheme="blue"

@@ -31,6 +31,7 @@ if (authToken) {
     name: cookies.get('username'),
     userId: cookies.get('userId'),
     image: cookies.get('avatarURL'),
+    email: cookies.get('email'),
     hashedPassword: cookies.get('hashedPassword'),
   }, authToken);
 }

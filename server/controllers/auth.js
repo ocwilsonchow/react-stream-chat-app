@@ -34,14 +34,14 @@ const login = async (req, res) => {
     if (!users.length)
       return res.status(400).json({ message: "User not found" });
 
-    const success = await bcrypt.compare(password, user[0].hashedPassword);
+    const success = await bcrypt.compare(password, users[0].hashedPassword);
 
     const token = serverClient.createUserToken(users[0].id);
 
     if (success) {
       res
         .status(200)
-        .json({ token, username: users[0].username, userId: users[0].id });
+        .json({ token, username: users[0].name, userId: users[0].id, email: users[0].email });
     } else {
       res.status(500).json({ message: "Incorrect password" });
     }
